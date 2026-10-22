@@ -375,18 +375,13 @@ Contributions, issues, and feature requests are welcome!
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
----
-
-## 📄 License
-
-Distributed under the **MIT License**. See `LICENSE` for more information.
 
 ---
 
 ## 👩‍💻 Author
 
 **Your Name**
-- GitHub: [@your-username](https://github.com/your-username)
-- LinkedIn: [your-profile](https://linkedin.com/in/your-profile)
+- GitHub:[ [@your-username](https://github.com/your-username)](https://github.com/Farahesham00) ]
+- LinkedIn: [https://www.linkedin.com/in/farah-hesham12/]
 
 ⭐ If you found this project useful, please consider giving it a star!
