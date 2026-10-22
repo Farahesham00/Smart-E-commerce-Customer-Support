@@ -1,0 +1,2549 @@
+{
+  "name": "Smart E-commerce Customer Support",
+  "nodes": [
+    {
+      "parameters": {
+        "inputText": "={{ $('When chat message received').item.json.chatInput }} || {{ $json.chatInput }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "greeting",
+              "description": "Greetings, small talk, or conversational openers without a specific e-commerce request, including \"hi\", \"hello\", \"hey\", \"good morning\", and \"how are you\". Do not classify a message as a greeting if it contains a clear order-related request."
+            },
+            {
+              "category": "specified_question",
+              "description": "The customer is asking for a specific action, question, or service.\nExamples:\n  - Track my order\n  - Where is my order?\n  - I want to cancel my order\n  - Can I exchange my order?\n  - I want to change the size\n  - What is my order status?"
+            }
+          ]
+        },
+        "options": {
+          "systemPromptTemplate": "=You are an e-commerce customer support intent classifier.\nPlease classify the text provided by the user into one of the following categories: {categories}, and use the provided formatting instructions below. Don't explain, and only output the json."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        -6304,
+        -368
+      ],
+      "id": "7194f40b-a8fe-4d7f-8258-30097a04b037",
+      "name": "Text Classifier"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        -6096,
+        -176
+      ],
+      "id": "e7f93c27-1feb-485a-82ec-2ef7eb1bbc0e",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        -6032,
+        544
+      ],
+      "id": "f456c46f-44a1-4807-a692-df352ccb00c8",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseMode": "responseNodes"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -6704,
+        -368
+      ],
+      "id": "dd3acdfd-2053-442e-85d5-51940d9bf47e",
+      "name": "When chat message received",
+      "webhookId": "75b94b54-14f8-48a9-a42c-54dae3b2ff42"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -5920,
+        320
+      ],
+      "id": "e96a35a3-72f6-4bc0-8fc9-95aebb6c70b5",
+      "name": "Chat2",
+      "webhookId": "73807d59-fba4-40f8-9ad2-7b2bbcc7b69d"
+    },
+    {
+      "parameters": {
+        "message": "Order is canceled successfully.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -2384,
+        832
+      ],
+      "id": "d0a4290d-33d7-4531-ac3c-f1ed7bfd83bf",
+      "name": "Chat4",
+      "webhookId": "f94662eb-9131-482d-b29f-89eeb6cbe896"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a friendly, professional AI customer support assistant for an e-commerce store. Your job is to communicate naturally with customers.\n\nExample\nUser: hi\nAgent: hi, how can i help you today?"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -6304,
+        320
+      ],
+      "id": "a9c2406e-059b-46a6-a31e-30d13ff175e0",
+      "name": "Greetings Agent"
+    },
+    {
+      "parameters": {
+        "content": "# 📍CANCELING ORDER",
+        "height": 720,
+        "width": 1360,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3552,
+        624
+      ],
+      "typeVersion": 1,
+      "id": "aac824f3-d3db-4d72-ba12-639595b06721",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Check Exchange Eligibility \nIs the product eligible for exchange according to the store's policy?",
+        "height": 688,
+        "width": 848,
+        "color": "#152429"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2672,
+        -528
+      ],
+      "typeVersion": 1,
+      "id": "2b8ea8f5-0638-47b3-b0fe-d64e4accdc5a",
+      "name": "Sticky Note2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "35ea5443-d369-476f-bdf9-3459d8212893",
+              "leftValue": "={{ $json.delivered_at }}",
+              "rightValue": "={{ $now.minus({ days: 7 }) }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "afterOrEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2416,
+        -336
+      ],
+      "id": "574321b7-abdd-42d0-b82c-383fdb3ff902",
+      "name": "permitted exchange period"
+    },
+    {
+      "parameters": {
+        "content": "# Greetings and getting to know customer need",
+        "height": 560,
+        "width": 656,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -6400,
+        160
+      ],
+      "typeVersion": 1,
+      "id": "995b6bd6-08c8-4294-85b4-05e6ab2c9cef",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "projectRef": "ehxoxrczapvatimejfbp",
+        "tableId": "exchange_requests",
+        "dataToSend": "autoMapInputData"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        -368
+      ],
+      "id": "818d79db-442c-4ce6-8679-ef1b1ba0fa2d",
+      "name": "Create exchange request",
+      "credentials": {
+        "supabaseOAuth2Api": {
+          "id": "blxNz078cqNvsmBi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "=Sorry, we can’t process your exchange request because it was submitted more than 7 days after delivery. \n\nThank you for your understanding.",
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 0.3,
+              "resumeUnit": "minutes"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -2144,
+        -176
+      ],
+      "id": "3998a035-4c12-49ec-8a04-0feb8e10ca9d",
+      "name": "Chat6",
+      "webhookId": "50a00fcd-0bde-45e8-9613-679fdcba7a2c"
+    },
+    {
+      "parameters": {
+        "content": "# Get Requested Order Items\n\n1. Retrieve the order details and order items using the verified Order number.\n2. Display the order items to the user, including product name, size, color, and quantity.\n3. Ask the user which item they want to exchange and what change they need (size, color, or both).\n4. Extract the user's exchange request and return it in JSON format:\n\n```json\n{\n  \"order_number\": \"ORD-1043\",\n  \"requested_changes\": [\n    {\n      \"product_name\": \"T-Shirt\",\n      \"current_size\": \"M\",\n      \"current_color\": \"Black\",\n      \"requested_size\": \"L\",\n      \"requested_color\": \"White\"\n    }\n  ]\n}\n```\n\n",
+        "height": 912,
+        "width": 1828,
+        "color": "#2C1726"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1824,
+        -752
+      ],
+      "typeVersion": 1,
+      "id": "8ef9970e-b935-490a-b221-ec919cd28c3e",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "# 1. Order number\n\n1. Check whether the user has already provided the Order number.\n2. If missing, ask the user to provide the Order number.\n3. Check whether the provided Order number exists in the database.\n4. If it exists, proceed to the **NEXT STEP**.\n5. If it does not exist, inform the user and ask them to provide a valid Order number. ",
+        "height": 896,
+        "width": 1808,
+        "color": "#1D210D"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -5712,
+        -768
+      ],
+      "typeVersion": 1,
+      "id": "d534893d-433f-47b5-8334-72f064d8a18c",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "# 2. Email Verification \n\n1. Check whether the user has provided their email address.\n2. If missing, ask the user to provide their email address.\n3. Verify whether the email matches the email associated with the Order Number in the database.\n4. If the email does not match, inform the user that the email is incorrect and ask them to provide the correct email.\n5. If the email matches, proceed to the next step.",
+        "height": 896,
+        "width": 2080,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -5712,
+        160
+      ],
+      "typeVersion": 1,
+      "id": "b5d36228-b679-4fd6-aafc-e7b358ba04d8",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "get",
+        "projectRef": "ehxoxrczapvatimejfbp",
+        "tableId": "order_items",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "order_id",
+              "keyValue": "={{ $('set order fields1').item.json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1696,
+        -352
+      ],
+      "id": "85ca5c13-1758-45df-a60f-ad38069325c2",
+      "name": "order items",
+      "credentials": {
+        "supabaseOAuth2Api": {
+          "id": "blxNz078cqNvsmBi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "get",
+        "projectRef": "ehxoxrczapvatimejfbp",
+        "tableId": "product_variants",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $json.variant_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1488,
+        -352
+      ],
+      "id": "a81b9b0f-aabc-417f-a6f4-57f7a2882106",
+      "name": "get product variant",
+      "credentials": {
+        "supabaseOAuth2Api": {
+          "id": "blxNz078cqNvsmBi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        -976,
+        -208
+      ],
+      "id": "371a2c59-23e3-44de-8c83-d2f95c8d2aeb",
+      "name": "Google Gemini Chat Model6",
+      "credentials": {
+        "googlePalmApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -816,
+        -352
+      ],
+      "id": "1f9a78eb-43b5-45dd-8133-1835113c8208",
+      "name": "ask for new order",
+      "webhookId": "a581294b-6414-4c26-961f-5bc0356db10d"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Customer message: {{ $('When chat message received').first().json.chatInput }}\n{{ $('Text Classifier').first().json.chatInput }}\n\nOrder items:\n{{ $('get product variant').all().map((it, i) => (i + 1) + ') Size: ' + it.json.size + ' | Color: ' + it.json.color + ' | Qty: ' + $('order items').all().find(o => o.json.variant_id === it.json.id).json.quantity + ' | Price: ' + it.json.price + ' EGP').join('\\n') }}\n\nTask: Show these items to the customer as a numbered list, then ask which ONE item they want to exchange and why.",
+        "options": {
+          "systemMessage": "You are a customer support assistant for an online store, handling the EXCHANGE step.\n\nYOUR TASK\n1. Show the customer the items in their order as a numbered list (product, size, color, price).\n2. Ask which ONE item they want to exchange.\n3. Ask for the reason: wrong size / color not liked / defective / wrong item received / different product.\n\nRULES\n- Use ONLY the data provided. Never invent products, prices, or details.\n- Never show internal IDs, UUIDs, or SKUs to the customer.\n- Do not promise availability, price difference, or pickup/delivery dates. Stock is checked in the next step.\n- Ask one clear question per message, and keep replies short.\n- If the customer asks about something unrelated to the exchange, say you'll help with it right after finishing the exchange.\n- If the order has only one item, confirm it with the customer instead of asking them to choose."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -1152,
+        -352
+      ],
+      "id": "9ebcac21-d799-4d13-be08-707af4a2c858",
+      "name": "show user their order and ask what to change",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        -576,
+        -128
+      ],
+      "id": "3d484a46-6549-45dd-8e58-20ef590e1629",
+      "name": "Google Gemini Chat Model8",
+      "credentials": {
+        "googlePalmApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Customer message: {{ $json.chatInput }}\n\nOrder items:\n{{ $('get product variant').all().map((it, i) => (i + 1) + ') Size: ' + it.json.size + ' | Color: ' + it.json.color + ' | Price: ' + it.json.price + ' EGP | SKU: ' + it.json.sku).join('\\n') }}\n\nTask: Extract the exchange request(s) from the customer message and return JSON only.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You extract exchange requests from a customer message.\n\nYou get the customer's message and a list of order items (size, color, SKU).\n\nFor each item the customer wants to change, return:\n- original_sku: the SKU of the matching order item, copied exactly from the list\n- requested_size: the new size as S, M, L or XL\n- requested_color: the new color in English\n\nRules:\n- If the customer changes only the size, requested_color = the original item's color.\n- If the customer changes only the color, requested_size = the original item's size.\n- Do not check stock and do not refuse any color or size.\n- Return only the JSON. Every value is a plain string."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -528,
+        -352
+      ],
+      "id": "cd004225-3806-4cc5-ab73-329b63239197",
+      "name": "show user their order and ask what to change1"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"exchanges\": [\n    {\n      \"original_sku\": \"TS-M-BLK\",\n      \"requested_size\": \"S\",\n      \"requested_color\": \"Yellow\"\n    }\n  ]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -336,
+        -144
+      ],
+      "id": "fe1519a2-1411-4f13-9b0a-a1fece435026",
+      "name": "Structured Output Parser2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const SIZE_MAP = {\n  'extra small': 'XS', 'xs': 'XS',\n  'small': 'S', 's': 'S',\n  'medium': 'M', 'm': 'M',\n  'large': 'L', 'l': 'L',\n  'extra large': 'XL', 'xl': 'XL',\n  'double extra large': 'XXL', 'xxl': 'XXL', '2xl': 'XXL',\n};\n\nconst COLOR_MAP = {\n  'black': 'BLK',\n  'white': 'WHT',\n  'yellow': 'YLW',\n  'red': 'RED',\n  'blue': 'BLU',\n  'green': 'GRN',\n  'gray': 'GRY',\n  'grey': 'GRY',\n};\n\nconst toSizeCode = (v) => SIZE_MAP[String(v ?? '').trim().toLowerCase()] ?? null;\nconst toColorCode = (v) => COLOR_MAP[String(v ?? '').trim().toLowerCase()] ?? null;\n\nconst output = $input.first().json.output ?? $input.first().json;\nconst exchanges = output.exchanges ?? [];\n\nreturn exchanges.map((ex) => {\n  const productCode = String(ex.original_sku ?? '').split('-')[0];\n  const sizeCode = toSizeCode(ex.requested_size);\n  const colorCode = toColorCode(ex.requested_color);\n  const valid = Boolean(productCode && sizeCode && colorCode);\n\n  return {\n    json: {\n      original_sku: ex.original_sku,\n      requested_size: ex.requested_size,\n      requested_color: ex.requested_color,\n      requested_sku: valid ? `${productCode}-${sizeCode}-${colorCode}` : null,\n      valid\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        -352
+      ],
+      "id": "23609472-88eb-400a-913e-27b1d70fa506",
+      "name": "requested SKU"
+    },
+    {
+      "parameters": {
+        "message": "sorry out of stock",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        576,
+        -48
+      ],
+      "id": "636db4f2-8d92-4d03-b811-00fe6b05386e",
+      "name": "Chat1",
+      "webhookId": "2ac12557-f178-45f8-889c-79d8c8a787d6"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "getAll",
+        "projectRef": "ehxoxrczapvatimejfbp",
+        "tableId": "product_variants",
+        "returnAll": true,
+        "orderBy": "id",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "sku",
+              "condition": "eq",
+              "keyValue": "={{ $json.requested_sku }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        176,
+        -352
+      ],
+      "id": "34abef4d-1db0-488f-973b-11cdb5f312a7",
+      "name": "GET product variant",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseOAuth2Api": {
+          "id": "blxNz078cqNvsmBi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "getAll",
+        "projectRef": "ehxoxrczapvatimejfbp",
+        "tableId": "inventory",
+        "returnAll": true,
+        "orderBy": "id",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "variant_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        368,
+        -352
+      ],
+      "id": "647460e9-3b4e-41c9-b7f9-673da2086dcc",
+      "name": "Get inventory",
+      "credentials": {
+        "supabaseOAuth2Api": {
+          "id": "blxNz078cqNvsmBi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a964874e-20ea-4d41-b152-712b8cf5af60",
+              "leftValue": "={{ $json.quantity_on_hand }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        560,
+        -352
+      ],
+      "id": "56c0659c-2373-4ddd-a4d6-4f4e67080421",
+      "name": "in stock?"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c5bd50ad-2150-45e1-b1e5-4042e85e5cb5",
+              "name": "order_id",
+              "value": "={{ $('set order NEXT STEP').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "1062dc2f-5e38-4bad-bfcf-c86b6590c6ef",
+              "name": "customer_id",
+              "value": "={{ $('set cutomer NEXT STEP').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "162f338c-cf2d-4be2-bc3b-568a32b7f02b",
+              "name": "order_item_id",
+              "value": "={{ $('order items').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "970b29b0-b75f-4ae6-9271-8d5a13bbcb96",
+              "name": "original_variant_id",
+              "value": "={{ $('get product variant').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "c2c226e3-c9fe-4f54-aefa-897c7f576856",
+              "name": "requested_variant_id",
+              "value": "={{ $('GET product variant').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "482b3a6b-c3d9-4d11-aba7-eaf867b02f58",
+              "name": "status",
+              "value": "confirmed",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        864,
+        -368
+      ],
+      "id": "01c09664-a133-4c19-90b5-2bf8649f6a0d",
+      "name": "Set new order FINAL STEP"
+    },
+    {
+      "parameters": {
+        "message": "done",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        1328,
+        -368
+      ],
+      "id": "d3fcd504-e84c-4d95-84e6-5fd1416da25c",
+      "name": "Chat",
+      "webhookId": "2ac12557-f178-45f8-889c-79d8c8a787d6"
+    },
+    {
+      "parameters": {
+        "content": "# Check requested order in Stock?",
+        "height": 944,
+        "width": 772,
+        "color": "#161C12"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        -752
+      ],
+      "typeVersion": 1,
+      "id": "ef785840-6125-4c12-93d5-82762fa8f4d1",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "# Create new request exchange order ",
+        "height": 944,
+        "width": 772,
+        "color": "#172121"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        768,
+        -752
+      ],
+      "typeVersion": 1,
+      "id": "52e047e4-62d2-4f09-855e-36fe1a115584",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "# 📍 EXCHANGE ORDER",
+        "height": 912,
+        "width": 848,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2672,
+        -752
+      ],
+      "typeVersion": 1,
+      "id": "a5ae8083-20bc-441c-8406-f623ca8bf486",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $input.first().json.chatInput || '';\n\n// Find a number that follows the word \"order\" (optionally with #, no., number, id)\nconst match = text.match(/order\\s*(?:#|no\\.?|number|id)?\\s*[:#-]?\\s*#?(\\d{3,})/i);\n\n// Fallback: any standalone 3+ digit number in the message\nconst fallback = text.match(/\\b\\d{3,}\\b/);\n\nconst order_number = match ? match[1] : (fallback ? fallback[0] : null);\n\nreturn [\n  {\n    json: {\n      sessionId: $input.first().json.sessionId,\n      chatInput: text,\n      status: order_number ? 'found' : 'not found'\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5648,
+        -352
+      ],
+      "id": "a8f053e9-ffe9-4a12-b119-819a88e519d2",
+      "name": "find order number2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "22b51ae6-f603-4993-8843-a9edf35fec6e",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "found",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -5376,
+        -352
+      ],
+      "id": "c6e7972a-e449-44ad-922c-9201043daefd",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "get",
+        "projectRef": "ehxoxrczapvatimejfbp",
+        "tableId": "orders",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "order_number",
+              "keyValue": "={{ String($json.order_number).startsWith('ORD-') ? $json.order_number : 'ORD-' + $json.order_number }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -4896,
+        -368
+      ],
+      "id": "aa81620e-73af-4309-9f9a-c433d595b66f",
+      "name": "search order number2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseOAuth2Api": {
+          "id": "blxNz078cqNvsmBi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "070cdc3d-c706-4e1d-b7bf-3ca0299ecbad",
+              "leftValue": "={{ $json.order_number }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -4688,
+        -368
+      ],
+      "id": "0ed1c7e1-452b-489c-b3dc-024c1f984dcd",
+      "name": "order number exists2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e90fc8c3-26e8-4e3d-996e-b87d091de8da",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "={{ $('set order NEXT STEP2').item.json.customer_id }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -3984,
+        448
+      ],
+      "id": "f915af94-8df0-459a-85d9-591d8e91e48a",
+      "name": "Verify Customer by Email2"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "=Your email {{ $('set email2').last().json.chatInput }} is still not correct.\nCan you retype your email correctly?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -4144,
+        656
+      ],
+      "id": "165a185e-8174-48cf-8fdc-f48bcf50ed6d",
+      "name": "Chat13",
+      "webhookId": "50a00fcd-0bde-45e8-9613-679fdcba7a2c"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "=Could you please type your order number",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -5376,
+        -144
+      ],
+      "id": "364440b5-4892-46d7-8a04-5ff2ace98061",
+      "name": "ASK order number2",
+      "webhookId": "0bd8cfa4-9fa0-4492-af54-37c85e49b019"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "77cfcea8-cf9f-4a9b-a9b3-7c44df15e36d",
+              "name": "order_number",
+              "value": "={{ ($json.chatInput || \"\").match(/\\b\\d{3,}\\b/)?.[0] || \"\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -5088,
+        -368
+      ],
+      "id": "0e47e2fa-b2b5-4125-8552-5dc8845449f7",
+      "name": "order_number2"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "=your order number {{ $('order_number2').last().json.order_number }}\nnot found!\n\ncould you please retype order number correctly!",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -4432,
+        -192
+      ],
+      "id": "4e630bdc-a3c6-4d8c-af33-3798b6a4a668",
+      "name": "retype order_number2",
+      "webhookId": "0bd8cfa4-9fa0-4492-af54-37c85e49b019"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "87c49df0-c7cf-4cb5-a9aa-9ce1c9c12b63",
+              "name": "chatInput",
+              "value": "={{ $json.chatInput.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/i)?.[0] || \"\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -5008,
+        544
+      ],
+      "id": "59db1e62-2986-436e-9bb2-bdbe901f2901",
+      "name": "set email2"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "=For your privacy, \nplease provide the email address associated with your order so we can securely verify your identity before proceeding",
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 0.5,
+              "resumeUnit": "minutes"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -5200,
+        672
+      ],
+      "id": "b52dec3a-3d0b-4ef9-9706-7cd464927366",
+      "name": "ask for email2",
+      "webhookId": "0bd8cfa4-9fa0-4492-af54-37c85e49b019"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "009bcb8f-23f8-461d-8cc8-5fd2ab5b1ac9",
+              "name": "created_at",
+              "value": "={{ $json.created_at }}",
+              "type": "string"
+            },
+            {
+              "id": "9d973a49-7806-4669-81e9-c19bb9841fe6",
+              "name": "order_number",
+              "value": "={{ $json.order_number }}",
+              "type": "string"
+            },
+            {
+              "id": "83f5f69a-5321-43c2-8b6e-0a0c1489cd3a",
+              "name": "status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "10908e15-5686-4ee8-a6c6-bd5fc3af570e",
+              "name": "payment_status",
+              "value": "={{ $json.payment_status }}",
+              "type": "string"
+            },
+            {
+              "id": "70705bab-ea47-472f-880b-6f8966a42d83",
+              "name": "shipping_address",
+              "value": "={{ $json.shipping_address }}",
+              "type": "string"
+            },
+            {
+              "id": "abb639f2-0287-4524-b7ba-f67a6e08020f",
+              "name": "phone",
+              "value": "={{ $json.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "18097303-104f-4637-8ffc-a15939c4ea18",
+              "name": "customer_id",
+              "value": "={{ $json.customer_id }}",
+              "type": "string"
+            },
+            {
+              "id": "209b6984-b322-48e4-95c6-121142913690",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -4208,
+        -384
+      ],
+      "id": "adfd9913-2a37-4f22-8f30-7348ab801a89",
+      "name": "set order NEXT STEP2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e13b11c5-8482-4ca8-a5dd-e0edf1e74110",
+              "name": "created_at",
+              "value": "={{ $('Verify Customer by Email2').item.json.created_at }}",
+              "type": "string"
+            },
+            {
+              "id": "6f08664e-de4f-40a6-a737-cefd877f58b5",
+              "name": "full_name",
+              "value": "={{ $('Verify Customer by Email2').item.json.full_name }}",
+              "type": "string"
+            },
+            {
+              "id": "684be34e-48b9-48f8-94a7-d6472e231318",
+              "name": "phone",
+              "value": "={{ $('Verify Customer by Email2').item.json.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "15c932fc-f4c9-4953-8e74-7719cc82aea8",
+              "name": "id",
+              "value": "={{ $('Verify Customer by Email2').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "08b9b93b-e914-4e55-81ec-7f9b0b4cf832",
+              "name": "email",
+              "value": "={{ $('Verify Customer by Email2').item.json.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -3584,
+        -208
+      ],
+      "id": "b8568180-df0c-43b9-8c49-1f07663915e5",
+      "name": "customer fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bdadd709-2332-4db7-a885-1e57a01ae316",
+              "name": "created_at",
+              "value": "={{ $('search order number2').item.json.created_at }}",
+              "type": "string"
+            },
+            {
+              "id": "1ecc4dee-fafe-4acf-82bf-fa4665eea213",
+              "name": "order_number",
+              "value": "={{ $('search order number2').item.json.order_number }}",
+              "type": "string"
+            },
+            {
+              "id": "ca8c3f5b-7f8f-4bf1-ba2c-febcb9e1fb8d",
+              "name": "status",
+              "value": "={{ $('search order number2').item.json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "5b436ad6-7e0a-4ab3-9e5a-35ebfc452094",
+              "name": "payment_status",
+              "value": "={{ $('search order number2').item.json.payment_status }}",
+              "type": "string"
+            },
+            {
+              "id": "4e689bd1-5551-4f27-a0a1-a344fcecf602",
+              "name": "shipping_address",
+              "value": "={{ $('search order number2').item.json.shipping_address }}",
+              "type": "string"
+            },
+            {
+              "id": "85a553e4-9e17-4dbd-97bb-1c0282081d9c",
+              "name": "phone",
+              "value": "={{ $('search order number2').item.json.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "deb863dd-8d9d-4cc4-8ed1-e22378b6eb9e",
+              "name": "customer_id",
+              "value": "={{ $('search order number2').item.json.customer_id }}",
+              "type": "string"
+            },
+            {
+              "id": "8f90576c-d5a7-40e6-9e77-fac3d085b2a7",
+              "name": "id",
+              "value": "={{ $('search order number2').item.json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -3776,
+        -208
+      ],
+      "id": "43eb7b6f-c9d6-4856-8723-32b61ee27136",
+      "name": "set order fields1"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "=Hi  {{ $('customer fields1').item.json.full_name }},\n\nyour order {{ $('set order fields1').item.json.order_number }} status is now in {{ $('set order fields1').item.json.status }} estimated deliverd at {{ $json.estimated_delivery_at }} \n\nAre you sure you want to cancel your order?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -3296,
+        848
+      ],
+      "id": "2e97a060-2e30-43e6-ac98-f5c5665816df",
+      "name": "Chat5",
+      "webhookId": "ec51c2f7-d381-4904-a7bb-e8cfa87dd2b5"
+    },
+    {
+      "parameters": {
+        "content": "## last check with the client",
+        "height": 368,
+        "width": 368,
+        "color": "#2C2626"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3360,
+        736
+      ],
+      "typeVersion": 1,
+      "id": "4eb356e6-ef6b-4dad-8d3e-18ef5903d2a1",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.user_reply }}",
+                    "rightValue": "yes",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "16581c92-780b-4472-b82e-ddf8a30650f0"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Yes"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "4073c289-b404-4849-9e67-e81c4b16dfba",
+                    "leftValue": "={{ $json.user_reply }}",
+                    "rightValue": "no",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "No"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -2896,
+        848
+      ],
+      "id": "1f0c4d28-c81d-4f4c-a7f1-dad8fd592fe5",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "delete",
+        "projectRef": "ehxoxrczapvatimejfbp",
+        "useCustomSchema": true,
+        "tableId": "orders",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "order_number",
+              "condition": "eq",
+              "keyValue": "={{ $('set order fields1').item.json.order_number }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -2624,
+        832
+      ],
+      "id": "4483197a-a105-497b-a5fd-fb457d82ae0f",
+      "name": "Delete order",
+      "credentials": {
+        "supabaseOAuth2Api": {
+          "id": "blxNz078cqNvsmBi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "message": "cancelling hold\n\ndo you want to customer support to contact you directly via call?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -2384,
+        1120
+      ],
+      "id": "5c543f56-eec2-4e70-8a58-b5055b84fd26",
+      "name": "Chat7",
+      "webhookId": "f94662eb-9131-482d-b29f-89eeb6cbe896"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "get",
+        "projectRef": "ehxoxrczapvatimejfbp",
+        "tableId": "shipments",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "order_id",
+              "keyValue": "={{ $('set order fields1').item.json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -3376,
+        -208
+      ],
+      "id": "166c8d45-ad58-42be-8e3f-78d7ee6414bf",
+      "name": "Get order shipments",
+      "credentials": {
+        "supabaseOAuth2Api": {
+          "id": "blxNz078cqNvsmBi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f85120cf-8ece-42b2-8a4e-51ed2805c127",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -4528,
+        544
+      ],
+      "id": "ba1908aa-2621-4217-8369-a588a29c1cc8",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "get",
+        "projectRef": "ehxoxrczapvatimejfbp",
+        "tableId": "customers",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "email",
+              "keyValue": "={{ $json.chatInput }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -4784,
+        544
+      ],
+      "id": "d9ec64a0-223a-4b58-9763-006651ca5f35",
+      "name": "email exists",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseOAuth2Api": {
+          "id": "blxNz078cqNvsmBi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": []
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -4224,
+        464
+      ],
+      "id": "a4076c24-6bc8-40ea-baf9-e1a03f486783",
+      "name": "set customer data"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "=Your email {{ $('set customer data').last().json.email }} is not matched with your order id \n\n\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -3904,
+        800
+      ],
+      "id": "f17a4f0b-5132-4293-a625-c4f59451f2ac",
+      "name": "Chat14",
+      "webhookId": "50a00fcd-0bde-45e8-9613-679fdcba7a2c"
+    },
+    {
+      "parameters": {
+        "message": "=Hi {{ $('customer fields1').item.json.full_name }},\n\nyour order {{ $('set order fields1').item.json.order_number }} status is now in {{ $('set order fields1').item.json.status }} estimated deliverd at {{ $json.estimated_delivery_at }}.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -2144,
+        304
+      ],
+      "id": "697f8bbd-bfe3-486d-a8c4-8fdc6a50a0e8",
+      "name": "Chat3",
+      "webhookId": "2a53af65-7e7d-465e-9d0c-06533e98bfca"
+    },
+    {
+      "parameters": {
+        "content": "# 📍TRACKING ORDER",
+        "height": 368,
+        "width": 976,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2672,
+        208
+      ],
+      "typeVersion": 1,
+      "id": "7f3e4480-dff9-4f16-9eb5-e521879aec99",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code Node - Run Once for Each Item\n// Adjust this to match the field that holds the user's message\nconst rawMessage = $input.first().json.chatInput;\n\n// ---------- Normalize ----------\nfunction normalize(text) {\n  return String(text)\n    .toLowerCase()\n    .trim()\n    // remove emojis & punctuation, keep letters/numbers/spaces/apostrophes\n    .replace(/[^\\p{L}\\p{N}\\s']/gu, ' ')\n    // collapse repeated letters: \"nooo\" -> \"no\", \"yesss\" -> \"yes\"\n    .replace(/(.)\\1{2,}/g, '$1')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nconst msg = normalize(rawMessage);\n\n// ---------- Patterns ----------\nconst noPatterns = [\n  /\\bno+\\b/, /\\bnope\\b/, /\\bnah\\b/, /\\bn\\b/,\n  /\\bwait\\b/, /\\bstop\\b/, /\\bhold on\\b/, /\\bhold up\\b/,\n  /\\bdon'?t\\b/, /\\bdo not\\b/, /\\bdont\\b/,\n  /\\bcancel that\\b/, /\\bnever ?mind\\b/, /\\bnot (now|yet|sure)\\b/,\n  /\\bchanged my mind\\b/, /\\bkeep (it|my order)\\b/, /\\bdon'?t cancel\\b/\n];\n\nconst yesPatterns = [\n  /\\byes+\\b/, /\\byeah\\b/, /\\byep\\b/, /\\byup\\b/, /\\by\\b/,\n  /\\bsure\\b/, /\\bi'?m sure\\b/, /\\bim sure\\b/, /\\bok(ay)?\\b/,\n  /\\bconfirm(ed)?\\b/, /\\bproceed\\b/, /\\bgo ahead\\b/,\n  /\\bdefinitely\\b/, /\\babsolutely\\b/, /\\bof course\\b/,\n  /\\bcancel (it|my order|the order)\\b/\n];\n\n// ---------- Decision ----------\n// \"No\" patterns are checked first, so \"no, wait\", \"don't\", and\n// \"I'm not sure\" are never mistaken for a \"yes\".\nlet user_reply = 'unknown';\n\nif (noPatterns.some(p => p.test(msg))) {\n  user_reply = 'no';\n} else if (yesPatterns.some(p => p.test(msg))) {\n  user_reply = 'yes';\n}\n\nreturn {\n  json: {\n    ...$json,\n    user_reply          // \"yes\" | \"no\" | \"unknown\"\n\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3120,
+        848
+      ],
+      "id": "0f0caa99-d0b7-4540-817d-6f2c99681c02",
+      "name": "user answer \"yes/no\""
+    },
+    {
+      "parameters": {
+        "content": "# Order & Customer Detailes",
+        "height": 576,
+        "width": 720,
+        "color": "#341313"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3872,
+        -448
+      ],
+      "typeVersion": 1,
+      "id": "ba3c70c5-e219-49ce-9582-6cf805925fcd",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9b7dac26-8caf-4e99-9cf9-2e57a5a36d29",
+              "leftValue": "={{ $('set order fields1').item.json.status }}",
+              "rightValue": " shipped",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -3520,
+        864
+      ],
+      "id": "418a5e62-02cf-462a-8ceb-5ddfbed263b7",
+      "name": "If order is shipped"
+    },
+    {
+      "parameters": {
+        "message": "can't cancel order its already shipped\n\ndo you want to customer support to contact you directly via call?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -3488,
+        1184
+      ],
+      "id": "1ebe00a8-1f5c-4580-b56a-b8b240b5703d",
+      "name": "Chat8",
+      "webhookId": "f94662eb-9131-482d-b29f-89eeb6cbe896"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0cc79636-77a2-4dd8-a10a-59bae0956f3e",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "found",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -5440,
+        560
+      ],
+      "id": "32943c90-1d48-4293-8db4-1aee358cc8e2",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Safely read a value from a node (returns '' if the node didn't run or the field is missing)\nconst safeGet = (fn) => {\n  try { return fn() || ''; } catch (e) { return ''; }\n};\n\n// Collect text from every place the user may have typed the email\nconst sources = [\n  safeGet(() => $('When chat message received').first().json.chatInput),\n  safeGet(() => $('Text Classifier').first().json.chatInput),\n  safeGet(() => $('ASK order number2').first().json.data.text),\n  safeGet(() => $input.first().json.chatInput),\n];\n\nconst text = sources.filter(Boolean).join(' ');\n\n// Find any email address in the combined text\nconst match = text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/i);\nconst email = match ? match[0].toLowerCase() : null;\n\nreturn [\n  {\n    json: {\n      sessionId: safeGet(() => $('When chat message received').first().json.sessionId),\n      chatInput: text,\n      email: email,\n      status: email ? 'found' : 'not found'\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5632,
+        560
+      ],
+      "id": "ae168e77-fca5-4981-98f7-aa4f51730797",
+      "name": "find email"
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $('When chat message received').first().json.chatInput }} || {{ $('Text Classifier').first().json.chatInput }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "exchange_order",
+              "description": "the user wants to exchange an existing item for another size, color, or product."
+            },
+            {
+              "category": "track_order",
+              "description": "the user asks about an existing order's status, location, or delivery."
+            },
+            {
+              "category": "cancel_order",
+              "description": "the user explicitly requests cancellation of an existing order."
+            },
+            {
+              "category": "human_handoff",
+              "description": "the user requests a human, seeks a refund, raises a complaint, reports a payment or damaged-item issue, makes an unsupported request, or has an unclear intent."
+            }
+          ]
+        },
+        "options": {
+          "systemPromptTemplate": "=You are an e-commerce customer support intent classifier.\nPlease classify the text provided by the user into one of the following categories: {categories}, and use the provided formatting instructions below. Don't explain, and only output the json."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        -3072,
+        -240
+      ],
+      "id": "b14bb657-aacb-4edc-9e24-bcb83a475213",
+      "name": "Text Classifier1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        -2944,
+        0
+      ],
+      "id": "d105c687-6623-4305-bca7-b57e54c36f00",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "message": "Sure. I’ll connect you with a customer service representative who can assist you further. \n\nestimated call within 10 to 15 mins\n\nYour request has been forwarded for review.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -528,
+        480
+      ],
+      "id": "7ad94d2d-14d3-4f2e-bebe-2f3514b62781",
+      "name": "Chat9",
+      "webhookId": "094640ad-3b9b-4863-9773-177b97934833"
+    },
+    {
+      "parameters": {
+        "content": "# 📍HUMAN HAND-OFF",
+        "height": 512,
+        "width": 1488,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1456,
+        224
+      ],
+      "typeVersion": 1,
+      "id": "8b6f3245-adc2-4e5b-81d5-6e769c5ef45d",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "projectRef": "ehxoxrczapvatimejfbp",
+        "tableId": "support_tickets",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "customer_id",
+              "fieldValue": "={{ $('customer fields1').item.json.id }}"
+            },
+            {
+              "fieldId": "order_id",
+              "fieldValue": "={{ $('set order fields1').item.json.id }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $('set order fields1').item.json.status }}"
+            },
+            {
+              "fieldId": "assigned_to",
+              "fieldValue": "farah hesham"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1056,
+        480
+      ],
+      "id": "19f348d3-3558-4f4b-bffb-36f3fc2764f9",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseOAuth2Api": {
+          "id": "blxNz078cqNvsmBi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "fhesham675@gmail.com",
+        "toEmail": "fhesham675@gmail.com",
+        "subject": "customer support",
+        "emailFormat": "text",
+        "text": "=dear customer support\n\nthe customer {{ $('customer fields1').item.json.full_name }} is waitimg for your call to fix their problem\n\nphone: {{ $('customer fields1').item.json.phone }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        -784,
+        480
+      ],
+      "id": "da1396ef-8544-4719-90d9-db9b8581f5b8",
+      "name": "Send an Email",
+      "webhookId": "d592ad77-4554-452d-bb2a-c322e2fc300c"
+    },
+    {
+      "parameters": {
+        "message": "Sure, your request is in process give us a seconds",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -1264,
+        480
+      ],
+      "id": "42f4969c-9ead-45ab-bed6-c43f786c6061",
+      "name": "Chat10",
+      "webhookId": "9b9b7f4c-eb53-4052-8d9f-b2cb4bdefd22"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2de91676-b1eb-4385-b5bf-2258a7d3bc0e",
+              "leftValue": "",
+              "rightValue": "yes",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1504,
+        1168
+      ],
+      "id": "d56c249b-c41d-4a47-b99d-259b1afe33a5",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "content": "# Text Classifier",
+        "height": 736,
+        "width": 400,
+        "color": "#341313"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3120,
+        -608
+      ],
+      "typeVersion": 1,
+      "id": "0be0ef22-11b9-4733-b928-1adadd8f119e",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "content": "# Text Classifier",
+        "height": 736,
+        "width": 656,
+        "color": "#341313"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -6400,
+        -592
+      ],
+      "typeVersion": 1,
+      "id": "b7280131-c0b8-420a-8e5e-1b8653e4de18",
+      "name": "Sticky Note14"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "Greetings Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "find order number2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Greetings Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat2": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Greetings Agent": {
+      "main": [
+        [
+          {
+            "node": "Chat2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "permitted exchange period": {
+      "main": [
+        [
+          {
+            "node": "order items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chat6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create exchange request": {
+      "main": [
+        [
+          {
+            "node": "Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat6": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "order items": {
+      "main": [
+        [
+          {
+            "node": "get product variant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get product variant": {
+      "main": [
+        [
+          {
+            "node": "show user their order and ask what to change",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "show user their order and ask what to change",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "show user their order and ask what to change": {
+      "main": [
+        [
+          {
+            "node": "ask for new order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model8": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "show user their order and ask what to change1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ask for new order": {
+      "main": [
+        [
+          {
+            "node": "show user their order and ask what to change1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "show user their order and ask what to change1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "show user their order and ask what to change1": {
+      "main": [
+        [
+          {
+            "node": "requested SKU",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "requested SKU": {
+      "main": [
+        [
+          {
+            "node": "GET product variant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET product variant": {
+      "main": [
+        [
+          {
+            "node": "Get inventory",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get inventory": {
+      "main": [
+        [
+          {
+            "node": "in stock?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "in stock?": {
+      "main": [
+        [
+          {
+            "node": "Set new order FINAL STEP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chat1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set new order FINAL STEP": {
+      "main": [
+        [
+          {
+            "node": "Create exchange request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "find order number2": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "order_number2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ASK order number2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "search order number2": {
+      "main": [
+        [
+          {
+            "node": "order number exists2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "order number exists2": {
+      "main": [
+        [
+          {
+            "node": "set order NEXT STEP2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "retype order_number2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Customer by Email2": {
+      "main": [
+        [
+          {
+            "node": "set order fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chat14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat13": {
+      "main": [
+        [
+          {
+            "node": "set email2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ASK order number2": {
+      "main": [
+        [
+          {
+            "node": "order_number2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "order_number2": {
+      "main": [
+        [
+          {
+            "node": "search order number2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "retype order_number2": {
+      "main": [
+        [
+          {
+            "node": "order_number2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set email2": {
+      "main": [
+        [
+          {
+            "node": "email exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ask for email2": {
+      "main": [
+        [
+          {
+            "node": "set email2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set order NEXT STEP2": {
+      "main": [
+        [
+          {
+            "node": "find email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "customer fields1": {
+      "main": [
+        [
+          {
+            "node": "Get order shipments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set order fields1": {
+      "main": [
+        [
+          {
+            "node": "customer fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat5": {
+      "main": [
+        [
+          {
+            "node": "user answer \"yes/no\"",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Delete order",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chat7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete order": {
+      "main": [
+        [
+          {
+            "node": "Chat4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get order shipments": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "set customer data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chat13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "email exists": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set customer data": {
+      "main": [
+        [
+          {
+            "node": "Verify Customer by Email2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "user answer \"yes/no\"": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If order is shipped": {
+      "main": [
+        [
+          {
+            "node": "Chat5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chat8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "set email2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ask for email2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "find email": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier1": {
+      "main": [
+        [
+          {
+            "node": "permitted exchange period",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chat3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If order is shipped",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chat10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat9": {
+      "main": [
+        []
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send an Email": {
+      "main": [
+        [
+          {
+            "node": "Chat9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat10": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat8": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Chat10",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Chat7": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "18d7f7d1-6739-49d3-9750-4b32ab723d98",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4776a73b8f52271e7d599d4d06b1324f2a8399bcdb4273df50e99f6224b76c68"
+  },
+  "nodeGroups": [],
+  "id": "sx5EzsbP0tQJkqWn",
+  "tags": []
+}
