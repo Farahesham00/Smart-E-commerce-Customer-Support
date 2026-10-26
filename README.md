@@ -381,7 +381,7 @@ Contributions, issues, and feature requests are welcome!
 ## 👩‍💻 Author
 
 **Your Name**
-- GitHub:[ [@your-username](https://github.com/your-username)](https://github.com/Farahesham00) ]
+- GitHub:[ (https://github.com/your-username)](https://github.com/Farahesham00) ]
 - LinkedIn: [https://www.linkedin.com/in/farah-hesham12/]
 
 ⭐ If you found this project useful, please consider giving it a star!
